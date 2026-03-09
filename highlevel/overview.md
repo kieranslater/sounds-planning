@@ -1,4 +1,4 @@
-# DogSeasons Audio App – High Level Design Document
+#  Audio App – High Level Design Document
 
 **Purpose:** Enable users to discover, play, and mix high-quality audio tracks for sleep, focus, and ambience. The system supports free and Pro tiers, offline caching, streaming via CDN, and analytics.
 
