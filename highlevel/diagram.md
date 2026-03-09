@@ -1,3 +1,5 @@
+```mermaid
+
 flowchart TD
     %% Client layer
     App[iOS / macOS App] -->|Request catalogue & previews| API[Go API]
@@ -24,3 +26,4 @@ flowchart TD
 
     %% Analytics
     Telemetry --> Dashboard[Analytics / Dashboard]
+    ```
