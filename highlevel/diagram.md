@@ -1,38 +1,26 @@
 flowchart TD
     %% Client layer
-    A[iOS / macOS App] -->|Request catalogue & previews| B[Go API]
-    A -->|Stream preview| C[Cloudflare CDN]
-    A -->|Stream full track| C
+    App[iOS / macOS App] -->|Request catalogue & previews| API[Go API]
+    App -->|Stream preview| CDN[Cloudflare CDN]
+    App -->|Stream full track| CDN
 
     %% Backend API
-    B --> D[DynamoDB: Tracks Table]
-    B --> E[DynamoDB: Users Table]
-    B --> F[DynamoDB / Telemetry Table]
-    B -->|Generate signed URL| C
+    API --> Tracks[DynamoDB: Tracks Table]
+    API --> Users[DynamoDB: Users Table]
+    API --> Telemetry[DynamoDB: Telemetry Table]
+    API -->|Generate signed URL| CDN
 
     %% Storage layer
-    C -->|Cache & serve| G[S3 Bucket: Previews / Full Tracks]
+    CDN -->|Cache & serve| S3[S3 Bucket: Previews / Full Tracks]
 
     %% Lambda preview generation
-    G -->|S3 PUT triggers| H[Lambda: Generate 20s Preview]
-    H -->|Store preview| G
-    H -->|Update metadata| D
+    S3 -->|S3 PUT triggers| Lambda[Lambda: Generate 20s Preview]
+    Lambda -->|Store preview| S3
+    Lambda -->|Update metadata| Tracks
 
     %% Admin upload flow
-    I[Admin Web UI] -->|Request presigned URL| B
-    I -->|Upload full track| G
+    Admin[Admin Web UI] -->|Request presigned URL| API
+    Admin -->|Upload full track| S3
 
     %% Analytics
-    F --> J[Analytics / Dashboard]
-    
-    %% Notes
-    classDef storage fill:#f9f,stroke:#333,stroke-width:1px;
-    classDef api fill:#bbf,stroke:#333,stroke-width:1px;
-    classDef client fill:#bfb,stroke:#333,stroke-width:1px;
-    classDef lambda fill:#ffb,stroke:#333,stroke-width:1px;
-    
-    class A client;
-    class B api;
-    class C storage;
-    class G storage;
-    class H lambda;
+    Telemetry --> Dashboard[Analytics / Dashboard]
